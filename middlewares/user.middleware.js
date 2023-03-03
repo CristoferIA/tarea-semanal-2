@@ -16,3 +16,20 @@ exports.userById = catchAsync(async (req, res, next) => {
   req.user = user;
   next();
 });
+
+exports.validateEmailExistUser = catchAsync(async (req, res, next) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({
+    where: {
+      email,
+      status: 'disabled',
+    },
+  });
+
+  if (user) {
+    return next(new AppError('The email user already exists', 400));
+  }
+
+  next();
+});

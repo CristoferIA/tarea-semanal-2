@@ -6,8 +6,13 @@ const {
   createUser,
   updateUser,
   deleteUser,
+  login,
 } = require('../controllers/user.controllers');
-const { userById } = require('../middlewares/user.middleware');
+const { protect } = require('../middlewares/auth.middleware');
+const {
+  userById,
+  validateEmailExistUser,
+} = require('../middlewares/user.middleware');
 const { validateFields } = require('../middlewares/validateField.middleware');
 
 const router = Router();
@@ -24,9 +29,23 @@ router.post(
     check('email', 'The email must be a correct format').isEmail(),
     check('password', 'The password is required').not().isEmpty(),
     validateFields,
+    validateEmailExistUser,
   ],
   createUser
 );
+
+router.post(
+  '/login',
+  [
+    check('email', 'The email must be mandatory').not().isEmpty(),
+    check('email', 'The email must be a correct format').isEmail(),
+    check('password', 'The password must be mandatory').not().isEmpty(),
+    validateFields,
+  ],
+  login
+);
+
+router.use(protect);
 
 router.patch(
   '/:id',

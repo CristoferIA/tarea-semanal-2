@@ -37,12 +37,13 @@ exports.createRepair = catchAsync(async (req, res) => {
 });
 exports.updateRepair = catchAsync(async (req, res) => {
   const { repair } = req;
-  const { status } = req.body;
-  await repair.update({ status });
+  await repair.update({ status: 'completed' });
+
   return res.status(200).json({
     status: 'success',
   });
 });
+
 exports.deleteRepair = catchAsync(async (req, res) => {
   const { repair } = req;
   await repair.update({ status: 'cancelled' });
