@@ -2,6 +2,7 @@ const User = require('../models/users.model');
 const catchAsync = require('../utils/catchAsync');
 const bcrypt = require('bcryptjs');
 const generateJWT = require('../utils/jwt');
+const AppError = require('../utils/AppError');
 
 exports.findAllUsers = catchAsync(async (req, res) => {
   const users = await User.findAll({
@@ -26,12 +27,11 @@ exports.findOneUser = catchAsync(async (req, res) => {
   });
 });
 exports.createUser = catchAsync(async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
   const user = new User({
     name,
     email,
     password,
-    role,
   });
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(password, salt);

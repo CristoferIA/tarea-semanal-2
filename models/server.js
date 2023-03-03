@@ -58,7 +58,7 @@ class Server {
     //relations
     initModel();
 
-    db.sync()
+    db.sync() // {force:true}
       .then(() => console.log('Database synced 😁'))
       .catch(err => console.log(err));
   }
